@@ -13,17 +13,16 @@ Each step will derive from a Scriptable Object and will have its own logic to it
 When developing a game you have to load and make some calculations at the start of the gameplay, like setting up the main character, setting up a server connection, downloading game store files, asking the server about other player's positions, etc.
 Here is a simple imaginary example of how you can arange some init steps as a tree where the parent must be successfully completed so all the chilrend can execute:
 
-Set server connection 				[blocker-async]
-	Load spawn area					[blocker]
-		Preload nearby areas	 		[async]
-	Download game store files 		[async]
-	Get remote players' infos  		[blocker-async]
-		Init remote entity system   [blocker]
-	Get/Update local player's infos [blocker-async]
-		Init pet system 			[blocker]
-		Init outfit system 			[blocker]
-		Init vehicle system 		[blocker]
-		Init house system 			[blocker]
-	Get ranking data from server 	[async]
-		Init ranking system
-
+	Set server connection 					[blocker-async]
+		Load spawn area					[blocker]
+			Preload nearby areas	 		[async]
+		Download game store files 			[async]
+		Get remote players' infos  			[blocker-async]
+			Init remote entity system   		[blocker]
+		Get/Update local player's infos 		[blocker-async]
+			Init pet system 			[blocker]
+			Init outfit system 			[blocker]
+			Init vehicle system 			[blocker]
+			Init house system 			[blocker]
+		Get ranking data from server 			[async]
+			Init ranking system
