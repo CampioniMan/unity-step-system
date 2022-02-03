@@ -17,7 +17,7 @@ namespace UnityEditor.TreeViewExamples
 			IDCounter = 0;
 			var treeElements = new List<StepTreeViewData>(numTotalElements);
 
-			var root = new StepTreeViewData("Root", -1, IDCounter, null, "", false, 1);
+			var root = new StepTreeViewData(-1, IDCounter, null, "", false, 1);
 			treeElements.Add(root);
 			for (int i = 0; i < numRootChildren; ++i)
 			{
@@ -40,7 +40,7 @@ namespace UnityEditor.TreeViewExamples
 				if (IDCounter > numTotalElements)
 					return;
 
-				var child = new StepTreeViewData("Element " + IDCounter, element.depth + 1, ++IDCounter, null, "", false, 1);
+				var child = new StepTreeViewData(element.depth + 1, ++IDCounter, null, "", false, 1);
 				treeElements.Add(child);
 
 				if (!force && Random.value < probabilityOfBeingLeaf)

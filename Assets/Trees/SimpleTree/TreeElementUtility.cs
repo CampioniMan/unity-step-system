@@ -40,7 +40,7 @@ namespace UnityEditor.TreeViewExamples
 		public static T ListToTree<T>(IList<T> list) where T : TreeElement
 		{
 			// Validate input
-			ValidateDepthValues (list);
+			ValidateDepthValues(list);
 
 			// Clear old states
 			foreach (var element in list)
@@ -54,8 +54,7 @@ namespace UnityEditor.TreeViewExamples
 			{
 				var parent = list[parentIndex];
 				bool alreadyHasValidChildren = parent.children != null;
-				if (alreadyHasValidChildren)
-					continue;
+				if (alreadyHasValidChildren) continue;
 
 				int parentDepth = parent.depth;
 				int childCount = 0;
@@ -64,9 +63,10 @@ namespace UnityEditor.TreeViewExamples
 				for (int i = parentIndex + 1; i < list.Count; i++)
 				{
 					if (list[i].depth == parentDepth + 1)
+					{
 						childCount++;
-					if (list[i].depth <= parentDepth)
-						break;
+					}
+					if (list[i].depth <= parentDepth) break;
 				}
 
 				// Fill child array
@@ -84,8 +84,7 @@ namespace UnityEditor.TreeViewExamples
 							childCount++;
 						}
 
-						if (list[i].depth <= parentDepth)
-							break;
+						if (list[i].depth <= parentDepth) break;
 					}
 				}
 
@@ -166,20 +165,6 @@ namespace UnityEditor.TreeViewExamples
 			List<T> result = new List<T>(elements);
 			result.RemoveAll(g => IsChildOf(g, elements));
 			return result;
-		}
-	}
-
-
-
-	class TreeElementUtilityTests
-	{
-		class TestElement : TreeElement
-		{
-			public TestElement (string name, int depth)
-			{
-				this.name = name;
-				this.depth = depth;
-			}
 		}
 	}
 }

@@ -21,30 +21,29 @@ namespace UnityEditor.TreeViewExamples
 	
 		public T root { get { return m_Root; } set { m_Root = value; } }
 		public event Action modelChanged;
-		public int numberOfDataElements
+		public int numberOfDataElements => m_Data.Count;
+
+		public TreeModel(IList<T> data)
 		{
-			get { return m_Data.Count; }
+			SetData(data);
 		}
 
-		public TreeModel (IList<T> data)
+		public T Find(int id)
 		{
-			SetData (data);
-		}
-
-		public T Find (int id)
-		{
-			return m_Data.FirstOrDefault (element => element.id == id);
+			return m_Data.FirstOrDefault(element => element.id == id);
 		}
 	
-		public void SetData (IList<T> data)
+		public void SetData(IList<T> data)
 		{
 			Init (data);
 		}
 
-		void Init (IList<T> data)
+		void Init(IList<T> data)
 		{
 			if (data == null)
+			{
 				throw new ArgumentNullException("data", "Input data is null. Ensure input is a non-null list.");
+			}
 
 			m_Data = data;
 			if (m_Data.Count > 0)
@@ -53,12 +52,12 @@ namespace UnityEditor.TreeViewExamples
 			m_MaxID = m_Data.Max(e => e.id);
 		}
 
-		public int GenerateUniqueID ()
+		public int GenerateUniqueID()
 		{
 			return ++m_MaxID;
 		}
 
-		public IList<int> GetAncestors (int id)
+		public IList<int> GetAncestors(int id)
 		{
 			var parents = new List<int>();
 			TreeElement T = Find(id);
@@ -73,7 +72,7 @@ namespace UnityEditor.TreeViewExamples
 			return parents;
 		}
 
-		public IList<int> GetDescendantsThatHaveChildren (int id)
+		public IList<int> GetDescendantsThatHaveChildren(int id)
 		{
 			T searchFromThis = Find(id);
 			if (searchFromThis != null)
@@ -105,13 +104,13 @@ namespace UnityEditor.TreeViewExamples
 			return parentsBelow;
 		}
 
-		public void RemoveElements (IList<int> elementIDs)
+		public void RemoveElements(IList<int> elementIDs)
 		{
 			IList<T> elements = m_Data.Where (element => elementIDs.Contains (element.id)).ToArray ();
 			RemoveElements (elements);
 		}
 
-		public void RemoveElements (IList<T> elements)
+		public void RemoveElements(IList<T> elements)
 		{
 			foreach (var element in elements)
 				if (element == m_Root)
@@ -130,7 +129,7 @@ namespace UnityEditor.TreeViewExamples
 			Changed();
 		}
 
-		public void AddElements (IList<T> elements, TreeElement parent, int insertPosition)
+		public void AddElements(IList<T> elements, TreeElement parent, int insertPosition)
 		{
 			if (elements == null)
 				throw new ArgumentNullException("elements", "elements is null");
@@ -155,7 +154,7 @@ namespace UnityEditor.TreeViewExamples
 			Changed();
 		}
 
-		public void AddRoot (T root)
+		public void AddRoot(T root)
 		{
 			if (root == null)
 				throw new ArgumentNullException("root", "root is null");
@@ -171,7 +170,7 @@ namespace UnityEditor.TreeViewExamples
 			m_Data.Add (root);
 		}
 
-		public void AddElement (T element, TreeElement parent, int insertPosition)
+		public void AddElement(T element, TreeElement parent, int insertPosition)
 		{
 			if (element == null)
 				throw new ArgumentNullException("element", "element is null");
@@ -222,7 +221,7 @@ namespace UnityEditor.TreeViewExamples
 			Changed ();
 		}
 
-		void Changed ()
+		void Changed()
 		{
 			if (modelChanged != null)
 				modelChanged ();

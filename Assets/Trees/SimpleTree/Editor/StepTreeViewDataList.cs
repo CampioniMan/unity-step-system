@@ -7,6 +7,7 @@ namespace UnityEditor.TreeViewExamples
 	public class StepTreeViewDataList : ScriptableObject
 	{
 		[SerializeField] List<StepTreeViewData> m_TreeElements = new List<StepTreeViewData>();
+		TreeModel<StepTreeViewData> stepTree;
 
 		internal List<StepTreeViewData> treeElements
 		{
@@ -14,12 +15,33 @@ namespace UnityEditor.TreeViewExamples
 			set { m_TreeElements = value; }
 		}
 
-		void Awake()
+		public void Preprare()
 		{
-			if (m_TreeElements.Count == 0)
+			stepTree = new TreeModel<StepTreeViewData>(m_TreeElements);
+		}
+
+		void PrepareChildren(StepTreeViewData element)
+		{
+			if (element == null || element.children == null)
 			{
-				m_TreeElements = StepTreeViewDataGenerator.GenerateRandomTree(40);
+				return;
 			}
+			
+		}
+
+		public void Execute()
+		{
+			ExecuteChildren(stepTree.root);
+		}
+
+		void ExecuteChildren(StepTreeViewData element)
+		{
+			if (element == null || element.children == null)
+			{
+				//TODO: Notify progress
+				return;
+			}
+
 		}
 	}
 }

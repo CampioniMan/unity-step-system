@@ -46,11 +46,11 @@ namespace UnityEditor.TreeViewExamples
 			get { return m_ID; } set { m_ID = value; }
 		}
 
-		public TreeElement ()
+		public TreeElement()
 		{
 		}
 
-		public TreeElement (string name, int depth, int id)
+		public TreeElement(string name, int depth, int id)
 		{
 			m_Name = name;
 			m_ID = id;
