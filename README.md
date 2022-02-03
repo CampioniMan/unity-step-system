@@ -1,5 +1,5 @@
-# unity-init-step
-A init step configuration for Unity using TreeView and Coroutines.
+# unity-step-system
+A step system for Unity using TreeView and Coroutines.
 Warning: Work in progress!
 
 # Requirements
@@ -14,3 +14,6 @@ When developing a game you have to load and make some calculations at the start 
 Here is a simple imaginary example of how you can arange some init steps as a tree where the parent must be successfully completed so all the children can execute:
 
 ![image](https://user-images.githubusercontent.com/20073691/152297739-43f96ecd-46ef-48f0-a3ab-fdead2a34503.png)
+
+# Cool Things
+TreeView is a Unity class that you can use to your own projects: https://docs.google.com/document/d/1B14wBRUiURm-LD6cISC5N0nvPngjglgL2T7vpsw1YSQ/edit?usp=sharing
