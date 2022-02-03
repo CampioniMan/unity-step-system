@@ -26,7 +26,11 @@ namespace UnityEditor.TreeViewExamples
 			{
 				return;
 			}
-			
+			foreach (StepTreeViewData child in element.children)
+			{
+				child.step.Prepare();
+				PrepareChildren(child);
+			}
 		}
 
 		public void Execute()
@@ -42,6 +46,16 @@ namespace UnityEditor.TreeViewExamples
 				return;
 			}
 
+			foreach (StepTreeViewData child in element.children)
+			{
+				child.step.Execute((success) =>
+				{
+					if (success)
+					{
+						ExecuteChildren(child);
+					}
+				});
+			}
 		}
 	}
 }

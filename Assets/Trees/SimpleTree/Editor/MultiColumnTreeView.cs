@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.Assertions;
+using StepSystem;
 
 namespace UnityEditor.TreeViewExamples
 {
@@ -188,7 +189,7 @@ namespace UnityEditor.TreeViewExamples
 					indentedRect.x += indentDisplacement;
 					indentedRect.width -= indentDisplacement + 5;
 
-					item.data.step = (ScriptableObject)EditorGUI.ObjectField(indentedRect, GUIContent.none, item.data.step, typeof(ScriptableObject), false);
+					item.data.step = (BaseCommonStep)EditorGUI.ObjectField(indentedRect, GUIContent.none, item.data.step, typeof(BaseCommonStep), false);
 					break;
 				}
 				case MyColumns.IsOptional:
