@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UnityEditor.TreeView
+namespace UnityEditor.TreeViewExamples
 {
+
+	// TreeElementUtility and TreeElement are useful helper classes for backend tree data structures.
+	// See tests at the bottom for examples of how to use.
+
 	public static class TreeElementUtility
 	{
 		public static void TreeToList<T>(T root, IList<T> result) where T : TreeElement
@@ -162,6 +166,20 @@ namespace UnityEditor.TreeView
 			List<T> result = new List<T>(elements);
 			result.RemoveAll(g => IsChildOf(g, elements));
 			return result;
+		}
+	}
+
+
+
+	class TreeElementUtilityTests
+	{
+		class TestElement : TreeElement
+		{
+			public TestElement (string name, int depth)
+			{
+				this.name = name;
+				this.depth = depth;
+			}
 		}
 	}
 }

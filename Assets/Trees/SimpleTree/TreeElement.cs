@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor.TreeView
+namespace UnityEditor.TreeViewExamples
 {
-	[Serializable] public class TreeElement
+	[Serializable]
+	public class TreeElement
 	{
 		[SerializeField] int m_ID;
 		[SerializeField] string m_Name;
@@ -56,7 +57,4 @@ namespace UnityEditor.TreeView
 			m_Depth = depth;
 		}
 	}
-
 }
-
-
