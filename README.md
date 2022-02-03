@@ -16,4 +16,4 @@ Here is a simple imaginary example of how you can arange some init steps as a tr
 ![image](https://user-images.githubusercontent.com/20073691/152297739-43f96ecd-46ef-48f0-a3ab-fdead2a34503.png)
 
 # Cool Things
-TreeView is a Unity class that you can use to your own projects: https://docs.google.com/document/d/1B14wBRUiURm-LD6cISC5N0nvPngjglgL2T7vpsw1YSQ/edit?usp=sharing
+TreeView is a Unity class that you can use in your own projects: https://docs.google.com/document/d/1B14wBRUiURm-LD6cISC5N0nvPngjglgL2T7vpsw1YSQ/edit?usp=sharing
