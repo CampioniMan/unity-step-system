@@ -8,26 +8,19 @@ using StepSystem.Interfaces;
 
 namespace StepSystem
 {
-	public abstract class BaseAsyncStep : BaseCommonStep, IAsyncStep
+	public abstract class BaseAsyncStep : BaseCommonStep
 	{
-		CancellationTokenSource source;
-		CancellationToken token;
-
-		public abstract Task<bool> ExecuteTask();
+		protected abstract Task<bool> ExecuteTask();
 
 		public override void Execute(Action<bool> onFinish)
 		{
-			source = new CancellationTokenSource();
-			token = source.Token;
-			Task<bool>.Run(ExecuteTask, token).ContinueWith((executedTask) => 
+			Task<bool>.Run(ExecuteTask).ContinueWith((executedTask) => 
 			{
 				onFinish.Invoke(executedTask.Result);
-			}, token);
+			});
 		}
 
-		public void CancelExecution()
-		{
-			source.Cancel();
-		}
+		//TODO: Add the possibility of canceling an async step
+		//public void CancelExecution();
 	}
 }

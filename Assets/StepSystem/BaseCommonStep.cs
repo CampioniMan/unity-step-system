@@ -6,7 +6,7 @@ using StepSystem.Interfaces;
 
 namespace StepSystem
 {
-	public abstract class BaseCommonStep : ScriptableObject, ICommonStep
+	public abstract class BaseCommonStep : ScriptableObject
 	{
 		public abstract void Prepare();
 		public abstract void Execute(Action<bool> onFinish);
