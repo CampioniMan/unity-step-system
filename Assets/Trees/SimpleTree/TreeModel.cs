@@ -106,21 +106,25 @@ namespace UnityEditor.TreeViewExamples
 
 		public void RemoveElements(IList<int> elementIDs)
 		{
-			IList<T> elements = m_Data.Where (element => elementIDs.Contains (element.id)).ToArray ();
-			RemoveElements (elements);
+			IList<T> elements = m_Data.Where(element => elementIDs.Contains(element.id)).ToArray();
+			RemoveElements(elements);
 		}
 
 		public void RemoveElements(IList<T> elements)
 		{
 			foreach (var element in elements)
+			{
 				if (element == m_Root)
+				{
 					throw new ArgumentException("It is not allowed to remove the root element");
+				}
+			}
 		
-			var commonAncestors = TreeElementUtility.FindCommonAncestorsWithinList (elements);
+			var commonAncestors = TreeElementUtility.FindCommonAncestorsWithinList(elements);
 
 			foreach (var element in commonAncestors)
 			{
-				element.parent.children.Remove (element);
+				element.parent.children.Remove(element);
 				element.parent = null;
 			}
 

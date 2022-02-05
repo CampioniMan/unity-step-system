@@ -13,6 +13,8 @@ namespace UnityEditor.TreeViewExamples
 		const float kRowHeights = 20f;
 		const float kToggleWidth = 18f;
 
+		public StepTreeViewData CurrentSelectedElement { get; private set; }
+
 		// All columns
 		enum MyColumns
 		{
@@ -222,12 +224,22 @@ namespace UnityEditor.TreeViewExamples
 			}
 		}
 
-		// Misc
-		//--------
+		protected override void SelectionChanged(IList<int> selectedIds)
+		{
+			if (selectedIds.Count > 0)
+			{
+				CurrentSelectedElement = treeModel.Find(selectedIds[0]);
+			}
+		}
+
+		public void NotifySelectedItemDeletion()
+		{
+			CurrentSelectedElement = null;
+		}
 
 		protected override bool CanMultiSelect(TreeViewItem item)
 		{
-			return true;
+			return false;
 		}
 
 		public static MultiColumnHeaderState CreateDefaultMultiColumnHeaderState(float treeViewWidth)

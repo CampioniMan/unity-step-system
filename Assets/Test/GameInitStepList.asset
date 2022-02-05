@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ece5226be2ebe4c8fa11f4f7c9eb1f, type: 3}
+  m_Name: GameInitStepList
+  m_EditorClassIdentifier: 
+  m_TreeElements:
+  - m_ID: 0
+    m_Name: Root
+    m_Depth: -1
+    isOptional: 0
+    weight: 0
+    step: {fileID: 0}
+    description: There must be a dummy root
+    icon: 
+  - m_ID: 2
+    m_Name: GameInitStep
+    m_Depth: 0
+    isOptional: 0
+    weight: 90
+    step: {fileID: 11400000, guid: 09630fe2622d2164488ac573390cae48, type: 2}
+    description: This is a multiplayer game, we need a server connection!
+    icon: 
+  - m_ID: 3
+    m_Name: GameInitStep
+    m_Depth: 1
+    isOptional: 1
+    weight: 0
+    step: {fileID: 11400000, guid: 7544590f62ef1eb4da57fe7bed6c5557, type: 2}
+    description: The game can open without the store, we don't need money
+    icon: 
+  - m_ID: 4
+    m_Name: GameInitStep
+    m_Depth: 1
+    isOptional: 1
+    weight: 0
+    step: {fileID: 11400000, guid: e2750dee9563c2445966d818a295ea00, type: 2}
+    description: The game can open without the store, we don't need money
+    icon: 
+  - m_ID: 5
+    m_Name: GameInitStep
+    m_Depth: 1
+    isOptional: 1
+    weight: 0
+    step: {fileID: 11400000, guid: 9c81070aaa813724eb9e910f63b4d3a2, type: 2}
+    description: The game can open without the store, we don't need money
+    icon: 
+  - m_ID: 6
+    m_Name: GameInitStep
+    m_Depth: 1
+    isOptional: 1
+    weight: 0
+    step: {fileID: 11400000, guid: 840fcf6d8c8fef444ac41cde4f27edd5, type: 2}
+    description: The game can open without the store, we don't need money
+    icon: 

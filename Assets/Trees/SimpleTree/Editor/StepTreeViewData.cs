@@ -16,7 +16,7 @@ namespace UnityEditor.TreeViewExamples
 		//EditorGUIUtility.FindTexture ("Folder Icon"),
 		public string icon = "";
 
-		public StepTreeViewData(int depth, int id, BaseCommonStep step, string description, bool isOptional, int weight = 1) : base(step.name ?? "", depth, id)
+		public StepTreeViewData(int depth, int id, BaseCommonStep step, string description, bool isOptional, int weight = 1) : base(step?.name ?? "", depth, id)
 		{
 			this.step = step;
 			this.description = description;

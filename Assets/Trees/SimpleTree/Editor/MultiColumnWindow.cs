@@ -14,10 +14,11 @@ namespace UnityEditor.TreeViewExamples
 		SearchField m_SearchField;
 		MultiColumnTreeView m_TreeView;
 		StepTreeViewDataList m_StepTreeViewDataList;
+		TreeModel<StepTreeViewData> treeModel;
 
 		Rect multiColumnTreeViewRect => new Rect(20f, 30f, position.width - 40f, position.height - 60f);
 		Rect toolbarRect => new Rect(20f, 10f, position.width - 40f, 20f);
-		Rect bottomToolbarRect => new Rect(20f, position.height - 18f, position.width - 40f, 16f);
+		Rect bottomToolbarRect => new Rect(20f, position.height - 20f, position.width - 40f, 20f);
 		Rect stepTreeAssetRect => new Rect(180f, position.height - 18f, Mathf.Max(140f, Mathf.Min(350f, position.width - 625f)), 16f);
 		
 		public MultiColumnTreeView treeView => m_TreeView;
@@ -30,19 +31,6 @@ namespace UnityEditor.TreeViewExamples
 			window.Focus();
 			window.Repaint();
 			return window;
-		}
-
-		[OnOpenAsset]
-		public static bool OnOpenAsset(int instanceID, int line)
-		{
-			var myTreeAsset = EditorUtility.InstanceIDToObject(instanceID) as StepTreeViewDataList;
-			if (myTreeAsset != null)
-			{
-				var window = GetWindow();
-				window.SetTreeAsset(myTreeAsset);
-				return true;
-			}
-			return false; // we did not handle the open
 		}
 
 		void SetTreeAsset(StepTreeViewDataList myTreeAsset)
@@ -75,7 +63,7 @@ namespace UnityEditor.TreeViewExamples
 					multiColumnHeader.ResizeToFit();
 				}
 
-				var treeModel = new TreeModel<StepTreeViewData>(m_StepTreeViewDataList.treeElements);
+				treeModel = new TreeModel<StepTreeViewData>(m_StepTreeViewDataList.treeElements);
 				
 				m_TreeView = new MultiColumnTreeView(m_TreeViewState, multiColumnHeader, treeModel);
 
@@ -89,19 +77,6 @@ namespace UnityEditor.TreeViewExamples
 		bool IsListDefined()
 		{
 			return m_StepTreeViewDataList != null && m_StepTreeViewDataList.treeElements != null && m_StepTreeViewDataList.treeElements.Count > 0;
-		}
-
-		void OnSelectionChange()
-		{
-			if (!m_Initialized) return;
-
-			var myTreeAsset = Selection.activeObject as StepTreeViewDataList;
-			if (myTreeAsset != null && myTreeAsset != m_StepTreeViewDataList)
-			{
-				m_StepTreeViewDataList = myTreeAsset;
-				m_TreeView.treeModel.SetData(m_StepTreeViewDataList.treeElements);
-				m_TreeView.Reload();
-			}
 		}
 
 		void OnGUI()
@@ -141,6 +116,27 @@ namespace UnityEditor.TreeViewExamples
 				GUILayout.FlexibleSpace();
 
 				var style = "miniButton";
+				if (treeView?.CurrentSelectedElement == null)
+				{
+					GUI.enabled = false;
+				}
+
+				if (GUILayout.Button("+", style))
+				{
+					treeModel.AddElement(new StepTreeViewData(treeView.CurrentSelectedElement.depth + 1, treeModel.GenerateUniqueID(), null, "", false),
+						treeView.CurrentSelectedElement, treeView.CurrentSelectedElement.children?.Count ?? 0);
+
+				}
+
+				if (GUILayout.Button("-", style))
+				{
+					//TODO: Delete multiple rows
+					treeModel.RemoveElements(new List<StepTreeViewData>() { treeView.CurrentSelectedElement });
+					treeView.NotifySelectedItemDeletion();
+				}
+
+				GUI.enabled = true;
+
 				if (GUILayout.Button("Expand All", style))
 				{
 					treeView.ExpandAll();
