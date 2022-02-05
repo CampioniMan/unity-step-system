@@ -154,6 +154,37 @@ namespace UnityEditor.TreeViewExamples
 			return m_TreeModel.GetDescendantsThatHaveChildren(id);
 		}
 
+		protected override void BeforeRowsGUI()
+		{
+			if (Event.current.rawType != UnityEngine.EventType.Repaint) return;
+
+			var count = GetRows().Count;
+			if (count <= 0) return;
+
+			GetFirstAndLastVisibleRows(out int firstRow, out int _);
+			if (firstRow < 0 || firstRow >= count) return;
+
+			var height = treeViewRect.height + state.scrollPos.y;
+			Rect position = new Rect(0f, 0f, 100000f, rowHeight);
+			var row = firstRow;
+			while ((double) position.yMax < (double) height)
+			{
+				if (row % 2 == 1)
+				{
+					if (row < count)
+					{
+						position = GetRowRect(row);
+					}
+					else
+					{
+						position.y += rowHeight * 2;
+					}
+					TreeView.DefaultStyles.backgroundEven.Draw(position, false, false, false, false);
+				}
+				row++;
+			}
+		}
+
 
 		// Dragging
 		//-----------

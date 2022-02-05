@@ -84,7 +84,6 @@ namespace UnityEditor.TreeViewExamples
 			// Custom setup
 			rowHeight = kRowHeights;
 			columnIndexForTreeFoldouts = 1;
-			showAlternatingRowBackgrounds = true;
 			showBorder = true;
 			customFoldoutYOffset = (kRowHeights - EditorGUIUtility.singleLineHeight) * 0.5f; // center foldout in the row since we also center content. See RowGUI
 			extraSpaceBeforeIconAndLabel = kToggleWidth;
