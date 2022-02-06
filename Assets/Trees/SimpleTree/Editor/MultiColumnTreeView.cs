@@ -180,7 +180,9 @@ namespace UnityEditor.TreeViewExamples
 			{
 				case MyColumns.Icon:
 				{
-					//GUI.DrawTexture(cellRect, s_TestIcons[GetIconIndex(item)], ScaleMode.ScaleToFit);
+					if (item.data.icon == null) break;
+
+					GUI.DrawTexture(cellRect, item.data.icon, ScaleMode.ScaleToFit);
 					break;
 				}
 				case MyColumns.StepAsset:
