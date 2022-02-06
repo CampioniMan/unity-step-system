@@ -20,15 +20,15 @@ The features that will be implemented in order to deploy the version 1.0.0 are m
 
 ## General
 - Proper "Weight" field usage;*
-- Proper search field functionality;
+- Proper search field functionality;*
 
 ## UI Improvements
 - Display other lists that are inside the list you are currently seeing;
 
 ## More Step Types
 Suggestions are great!
-- DecisionStep: A step to split the flow between various other steps, choosing one or multiple to be executed;
 - SubTreeStep: Executes another step tree. Only completes when the sub tree successfully executes its necessary steps;*
+- DecisionStep: A step to split the flow between various other steps, choosing one or multiple to be executed;
 
 ## Nice To Have
 - The ability to cancel an AsyncStep using a [CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-6.0);
