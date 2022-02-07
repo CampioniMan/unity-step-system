@@ -18,13 +18,14 @@ namespace UnityEditor.TreeViewExamples
 
 	internal class TreeViewWithTreeModel<T> : TreeView where T : TreeElement
 	{
-		TreeModel<T> m_TreeModel;
-		readonly List<TreeViewItem> m_Rows = new List<TreeViewItem>(100);
+		const string k_GenericDragID = "GenericDragColumnDragging";
+
+		TreeModel<T> treeModel;
+		readonly List<TreeViewItem> rowValues = new List<TreeViewItem>(100);
 		public event Action treeChanged;
 
-		public TreeModel<T> treeModel => m_TreeModel;
+		public TreeModel<T> Tree => treeModel;
 		public event Action<IList<TreeViewItem>> beforeDroppingDraggedItems;
-
 
 		public TreeViewWithTreeModel(TreeViewState state, TreeModel<T> model) : base(state)
 		{
@@ -39,49 +40,48 @@ namespace UnityEditor.TreeViewExamples
 
 		void Init(TreeModel<T> model)
 		{
-			m_TreeModel = model;
-			m_TreeModel.modelChanged += ModelChanged;
+			treeModel = model;
+			treeModel.modelChanged += ModelChanged;
 		}
 
 		void ModelChanged()
 		{
 			if (treeChanged != null)
 			{
-				treeChanged ();
+				treeChanged();
 			}
 
-			Reload ();
+			Reload();
 		}
 
 		protected override TreeViewItem BuildRoot()
 		{
 			int depthForHiddenRoot = -1;
-			return new TreeViewItem<T>(m_TreeModel.root.id, depthForHiddenRoot, m_TreeModel.root.name, m_TreeModel.root);
+			return new TreeViewItem<T>(treeModel.root.id, depthForHiddenRoot, treeModel.root.name, treeModel.root);
 		}
 
 		protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
 		{
-			if (m_TreeModel.root == null)
+			if (treeModel.root == null)
 			{
 				Debug.LogError("tree model root is null. did you call SetData()?");
 			}
 
-			m_Rows.Clear();
+			rowValues.Clear();
 			if (!string.IsNullOrEmpty(searchString))
 			{
-				Search(m_TreeModel.root, searchString, m_Rows);
+				Search(treeModel.root, searchString, rowValues);
 			}
-			else
+			else if (treeModel.root.hasChildren)
 			{
-				if (m_TreeModel.root.hasChildren)
-					AddChildrenRecursive(m_TreeModel.root, 0, m_Rows);
+				AddChildrenRecursive(treeModel.root, 0, rowValues);
 			}
 
 			// We still need to setup the child parent information for the rows since this 
 			// information is used by the TreeView internal logic (navigation, dragging etc)
-			SetupParentsAndChildrenFromDepths(root, m_Rows);
+			SetupParentsAndChildrenFromDepths(root, rowValues);
 
-			return m_Rows;
+			return rowValues;
 		}
 
 		void AddChildrenRecursive(T parent, int depth, IList<TreeViewItem> newRows)
@@ -146,12 +146,12 @@ namespace UnityEditor.TreeViewExamples
 	
 		protected override IList<int> GetAncestors(int id)
 		{
-			return m_TreeModel.GetAncestors(id);
+			return treeModel.GetAncestors(id);
 		}
 
 		protected override IList<int> GetDescendantsThatHaveChildren(int id)
 		{
-			return m_TreeModel.GetDescendantsThatHaveChildren(id);
+			return treeModel.GetDescendantsThatHaveChildren(id);
 		}
 
 		protected override void BeforeRowsGUI()
@@ -185,12 +185,6 @@ namespace UnityEditor.TreeViewExamples
 			}
 		}
 
-
-		// Dragging
-		//-----------
-	
-		const string k_GenericDragID = "GenericDragColumnDragging";
-
 		protected override bool CanStartDrag(CanStartDragArgs args)
 		{
 			return true;
@@ -198,8 +192,7 @@ namespace UnityEditor.TreeViewExamples
 
 		protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
 		{
-			if (hasSearch)
-				return;
+			if (hasSearch) return;
 
 			DragAndDrop.PrepareStartDrag();
 			var draggedRows = GetRows().Where(item => args.draggedItemIDs.Contains(item.id)).ToList();
@@ -209,55 +202,59 @@ namespace UnityEditor.TreeViewExamples
 			DragAndDrop.StartDrag (title);
 		}
 
-		protected override DragAndDropVisualMode HandleDragAndDrop (DragAndDropArgs args)
+		protected override DragAndDropVisualMode HandleDragAndDrop(DragAndDropArgs args)
 		{
 			// Check if we can handle the current drag data (could be dragged in from other areas/windows in the editor)
 			var draggedRows = DragAndDrop.GetGenericData(k_GenericDragID) as List<TreeViewItem>;
 			if (draggedRows == null)
+			{
 				return DragAndDropVisualMode.None;
+			}
 
 			// Parent item is null when dragging outside any tree view items.
 			switch (args.dragAndDropPosition)
 			{
 				case DragAndDropPosition.UponItem:
 				case DragAndDropPosition.BetweenItems:
+				{
+					bool validDrag = ValidDrag(args.parentItem, draggedRows);
+					if (args.performDrop && validDrag)
 					{
-						bool validDrag = ValidDrag(args.parentItem, draggedRows);
-						if (args.performDrop && validDrag)
-						{
-							T parentData = ((TreeViewItem<T>)args.parentItem).data;
-							OnDropDraggedElementsAtIndex(draggedRows, parentData, args.insertAtIndex == -1 ? 0 : args.insertAtIndex);
-						}
-						return validDrag ? DragAndDropVisualMode.Move : DragAndDropVisualMode.None;
+						T parentData = ((TreeViewItem<T>)args.parentItem).data;
+						OnDropDraggedElementsAtIndex(draggedRows, parentData, args.insertAtIndex == -1 ? 0 : args.insertAtIndex);
 					}
-
+					return validDrag ? DragAndDropVisualMode.Move : DragAndDropVisualMode.None;
+				}
 				case DragAndDropPosition.OutsideItems:
+				{
+					if (args.performDrop)
 					{
-						if (args.performDrop)
-							OnDropDraggedElementsAtIndex(draggedRows, m_TreeModel.root, m_TreeModel.root.children.Count);
-
-						return DragAndDropVisualMode.Move;
+						OnDropDraggedElementsAtIndex(draggedRows, treeModel.root, treeModel.root.children.Count);
 					}
+
+					return DragAndDropVisualMode.Move;
+				}
 				default:
+				{
 					Debug.LogError("Unhandled enum " + args.dragAndDropPosition);
 					return DragAndDropVisualMode.None;
+				}
 			}
 		}
 
-		public virtual void OnDropDraggedElementsAtIndex (List<TreeViewItem> draggedRows, T parent, int insertIndex)
+		public virtual void OnDropDraggedElementsAtIndex(List<TreeViewItem> draggedRows, T parent, int insertIndex)
 		{
 			if (beforeDroppingDraggedItems != null)
-				beforeDroppingDraggedItems (draggedRows);
+				beforeDroppingDraggedItems(draggedRows);
 
-			var draggedElements = new List<TreeElement> ();
+			var draggedElements = new List<TreeElement>();
 			foreach (var x in draggedRows)
-				draggedElements.Add (((TreeViewItem<T>) x).data);
+				draggedElements.Add(((TreeViewItem<T>) x).data);
 		
-			var selectedIDs = draggedElements.Select (x => x.id).ToArray();
-			m_TreeModel.MoveElements (parent, insertIndex, draggedElements);
+			var selectedIDs = draggedElements.Select(x => x.id).ToArray();
+			treeModel.MoveElements(parent, insertIndex, draggedElements);
 			SetSelection(selectedIDs, TreeViewSelectionOptions.RevealAndFrame);
 		}
-
 
 		bool ValidDrag(TreeViewItem parent, List<TreeViewItem> draggedItems)
 		{
@@ -270,7 +267,5 @@ namespace UnityEditor.TreeViewExamples
 			}
 			return true;
 		}
-	
 	}
-
 }

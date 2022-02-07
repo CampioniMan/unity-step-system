@@ -20,7 +20,7 @@ MonoBehaviour:
     weight: 0
     step: {fileID: 0}
     description: There must be a dummy root
-    icon: 
+    icon: {fileID: 0}
   - m_ID: 2
     m_Name: GameInitStep
     m_Depth: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
     weight: 90
     step: {fileID: 11400000, guid: 09630fe2622d2164488ac573390cae48, type: 2}
     description: This is a multiplayer game, we need a server connection!
-    icon: 
+    icon: {fileID: 2800000, guid: b1af111f2f50dca46bd16ddb237a1c3f, type: 3}
   - m_ID: 3
     m_Name: GameInitStep
     m_Depth: 1
@@ -36,7 +36,7 @@ MonoBehaviour:
     weight: 0
     step: {fileID: 11400000, guid: 7544590f62ef1eb4da57fe7bed6c5557, type: 2}
     description: The game can open without the store, we don't need money
-    icon: 
+    icon: {fileID: 0}
   - m_ID: 4
     m_Name: GameInitStep
     m_Depth: 1
@@ -44,7 +44,7 @@ MonoBehaviour:
     weight: 0
     step: {fileID: 11400000, guid: e2750dee9563c2445966d818a295ea00, type: 2}
     description: The game can open without the store, we don't need money
-    icon: 
+    icon: {fileID: 0}
   - m_ID: 5
     m_Name: GameInitStep
     m_Depth: 1
@@ -52,7 +52,7 @@ MonoBehaviour:
     weight: 0
     step: {fileID: 11400000, guid: 9c81070aaa813724eb9e910f63b4d3a2, type: 2}
     description: The game can open without the store, we don't need money
-    icon: 
+    icon: {fileID: 0}
   - m_ID: 6
     m_Name: GameInitStep
     m_Depth: 1
@@ -60,4 +60,52 @@ MonoBehaviour:
     weight: 0
     step: {fileID: 11400000, guid: 840fcf6d8c8fef444ac41cde4f27edd5, type: 2}
     description: The game can open without the store, we don't need money
-    icon: 
+    icon: {fileID: 0}
+  - m_ID: 7
+    m_Name: 
+    m_Depth: 2
+    isOptional: 0
+    weight: 1
+    step: {fileID: 0}
+    description: 
+    icon: {fileID: 0}
+  - m_ID: 8
+    m_Name: 
+    m_Depth: 2
+    isOptional: 0
+    weight: 1
+    step: {fileID: 0}
+    description: 
+    icon: {fileID: 0}
+  - m_ID: 9
+    m_Name: 
+    m_Depth: 2
+    isOptional: 0
+    weight: 1
+    step: {fileID: 0}
+    description: 
+    icon: {fileID: 0}
+  - m_ID: 10
+    m_Name: 
+    m_Depth: 2
+    isOptional: 0
+    weight: 1
+    step: {fileID: 0}
+    description: 
+    icon: {fileID: 0}
+  - m_ID: 11
+    m_Name: 
+    m_Depth: 2
+    isOptional: 0
+    weight: 1
+    step: {fileID: 0}
+    description: 
+    icon: {fileID: 0}
+  - m_ID: 12
+    m_Name: 
+    m_Depth: 2
+    isOptional: 0
+    weight: 1
+    step: {fileID: 0}
+    description: 
+    icon: {fileID: 0}

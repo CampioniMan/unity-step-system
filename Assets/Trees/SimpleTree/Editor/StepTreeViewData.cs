@@ -12,8 +12,6 @@ namespace UnityEditor.TreeViewExamples
 		public int weight = 1;
 		public BaseCommonStep step;
 		public string description = "";
-
-		//EditorGUIUtility.FindTexture ("Folder Icon"),
 		public Texture2D icon;
 
 		public StepTreeViewData(int depth, int id, BaseCommonStep step, string description, bool isOptional, int weight = 1) : base(step?.name ?? "", depth, id)

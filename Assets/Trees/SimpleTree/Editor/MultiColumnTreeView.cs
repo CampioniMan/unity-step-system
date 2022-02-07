@@ -229,7 +229,7 @@ namespace UnityEditor.TreeViewExamples
 		{
 			if (selectedIds.Count > 0)
 			{
-				CurrentSelectedElement = treeModel.Find(selectedIds[0]);
+				CurrentSelectedElement = Tree.Find(selectedIds[0]);
 			}
 		}
 

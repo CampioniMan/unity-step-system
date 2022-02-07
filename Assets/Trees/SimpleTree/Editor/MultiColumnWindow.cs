@@ -8,20 +8,21 @@ namespace UnityEditor.TreeViewExamples
 {
 	class MultiColumnWindow : EditorWindow
 	{
-		[NonSerialized] bool m_Initialized;
-		[SerializeField] TreeViewState m_TreeViewState; // Serialized in the window layout file so it survives assembly reloading
-		[SerializeField] MultiColumnHeaderState m_MultiColumnHeaderState;
-		SearchField m_SearchField;
-		MultiColumnTreeView m_TreeView;
-		StepTreeViewDataList m_StepTreeViewDataList;
+		[NonSerialized] bool isInitialized;
+		[SerializeField] TreeViewState treeViewState; // Serialized in the window layout file so it survives assembly reloading
+		[SerializeField] MultiColumnHeaderState multiColumnHeaderState;
+
+		SearchField searchField;
+		MultiColumnTreeView treeView;
+		StepTreeViewDataList stepTreeViewDataList;
 		TreeModel<StepTreeViewData> treeModel;
 
-		Rect multiColumnTreeViewRect => new Rect(20f, 30f, position.width - 40f, position.height - 60f);
-		Rect toolbarRect => new Rect(20f, 10f, position.width - 40f, 20f);
-		Rect bottomToolbarRect => new Rect(20f, position.height - 20f, position.width - 40f, 20f);
-		Rect stepTreeAssetRect => new Rect(180f, position.height - 18f, Mathf.Max(140f, Mathf.Min(350f, position.width - 625f)), 16f);
+		Rect multiColumnTreeViewRect 	=> new Rect(20f, 30f, position.width - 40f, position.height - 60f);
+		Rect toolbarRect 				=> new Rect(20f, 10f, position.width - 40f, 20f);
+		Rect bottomToolbarRect			=> new Rect(20f, position.height - 20f, position.width - 40f, 20f);
+		Rect stepTreeAssetRect 			=> new Rect(180f, position.height - 18f, Mathf.Max(140f, Mathf.Min(350f, position.width - 625f)), 16f);
 		
-		public MultiColumnTreeView treeView => m_TreeView;
+		public MultiColumnTreeView view => treeView;
 
 		[MenuItem("Step Tree/Open Window")]
 		public static MultiColumnWindow GetWindow()
@@ -35,27 +36,27 @@ namespace UnityEditor.TreeViewExamples
 
 		void SetTreeAsset(StepTreeViewDataList myTreeAsset)
 		{
-			m_StepTreeViewDataList = myTreeAsset;
-			m_Initialized = false;
+			stepTreeViewDataList = myTreeAsset;
+			isInitialized = false;
 		}
 
 		void InitIfNeeded()
 		{
-			if (!m_Initialized)
+			if (!isInitialized)
 			{
 				// Check if it already exists (deserialized from window layout file or scriptable object)
-				if (m_TreeViewState == null)
+				if (treeViewState == null)
 				{
-					m_TreeViewState = new TreeViewState();
+					treeViewState = new TreeViewState();
 				}
 
-				bool firstInit = m_MultiColumnHeaderState == null;
+				bool firstInit = multiColumnHeaderState == null;
 				var headerState = MultiColumnTreeView.CreateDefaultMultiColumnHeaderState(multiColumnTreeViewRect.width);
-				if (MultiColumnHeaderState.CanOverwriteSerializedFields(m_MultiColumnHeaderState, headerState))
+				if (MultiColumnHeaderState.CanOverwriteSerializedFields(multiColumnHeaderState, headerState))
 				{
-					MultiColumnHeaderState.OverwriteSerializedFields(m_MultiColumnHeaderState, headerState);
+					MultiColumnHeaderState.OverwriteSerializedFields(multiColumnHeaderState, headerState);
 				}
-				m_MultiColumnHeaderState = headerState;
+				multiColumnHeaderState = headerState;
 				
 				var multiColumnHeader = new MyMultiColumnHeader(headerState);
 				if (firstInit)
@@ -63,20 +64,20 @@ namespace UnityEditor.TreeViewExamples
 					multiColumnHeader.ResizeToFit();
 				}
 
-				treeModel = new TreeModel<StepTreeViewData>(m_StepTreeViewDataList.treeElements);
+				treeModel = new TreeModel<StepTreeViewData>(stepTreeViewDataList.treeElements);
 				
-				m_TreeView = new MultiColumnTreeView(m_TreeViewState, multiColumnHeader, treeModel);
+				treeView = new MultiColumnTreeView(treeViewState, multiColumnHeader, treeModel);
 
-				m_SearchField = new SearchField();
-				m_SearchField.downOrUpArrowKeyPressed += m_TreeView.SetFocusAndEnsureSelectedItem;
+				searchField = new SearchField();
+				searchField.downOrUpArrowKeyPressed += treeView.SetFocusAndEnsureSelectedItem;
 
-				m_Initialized = true;
+				isInitialized = true;
 			}
 		}
 
 		bool IsListDefined()
 		{
-			return m_StepTreeViewDataList != null && m_StepTreeViewDataList.treeElements != null && m_StepTreeViewDataList.treeElements.Count > 0;
+			return stepTreeViewDataList != null && stepTreeViewDataList.treeElements != null && stepTreeViewDataList.treeElements.Count > 0;
 		}
 
 		void OnGUI()
@@ -91,12 +92,12 @@ namespace UnityEditor.TreeViewExamples
 
 		void SearchBar(Rect rect)
 		{
-			treeView.searchString = m_SearchField.OnGUI(rect, treeView.searchString);
+			view.searchString = searchField.OnGUI(rect, view.searchString);
 		}
 
 		void DoTreeView(Rect rect)
 		{
-			m_TreeView.OnGUI(rect);
+			treeView.OnGUI(rect);
 		}
 
 		void BottomToolBar(Rect rect)
@@ -106,7 +107,7 @@ namespace UnityEditor.TreeViewExamples
 			using (new EditorGUILayout.HorizontalScope())
 			{
 				GUILayout.Label("Step List: ");
-				m_StepTreeViewDataList = (StepTreeViewDataList)EditorGUILayout.ObjectField( m_StepTreeViewDataList, typeof(StepTreeViewDataList), false, GUILayout.MinWidth(200), GUILayout.MaxWidth(5000));
+				stepTreeViewDataList = (StepTreeViewDataList)EditorGUILayout.ObjectField( stepTreeViewDataList, typeof(StepTreeViewDataList), false, GUILayout.MinWidth(200), GUILayout.MaxWidth(5000));
 				if (!IsListDefined())
 				{
 					GUILayout.EndArea();
@@ -116,35 +117,35 @@ namespace UnityEditor.TreeViewExamples
 				GUILayout.FlexibleSpace();
 
 				var style = "miniButton";
-				if (treeView?.CurrentSelectedElement == null)
+				if (view?.CurrentSelectedElement == null)
 				{
 					GUI.enabled = false;
 				}
 
 				if (GUILayout.Button("+", style))
 				{
-					treeModel.AddElement(new StepTreeViewData(treeView.CurrentSelectedElement.depth + 1, treeModel.GenerateUniqueID(), null, "", false),
-						treeView.CurrentSelectedElement, treeView.CurrentSelectedElement.children?.Count ?? 0);
+					treeModel.AddElement(new StepTreeViewData(view.CurrentSelectedElement.depth + 1, treeModel.GenerateUniqueID(), null, "", false),
+						view.CurrentSelectedElement, view.CurrentSelectedElement.children?.Count ?? 0);
 
 				}
 
 				if (GUILayout.Button("-", style))
 				{
 					//TODO: Delete multiple rows
-					treeModel.RemoveElements(new List<StepTreeViewData>() { treeView.CurrentSelectedElement });
-					treeView.NotifySelectedItemDeletion();
+					treeModel.RemoveElements(new List<StepTreeViewData>() { view.CurrentSelectedElement });
+					view.NotifySelectedItemDeletion();
 				}
 
 				GUI.enabled = true;
 
 				if (GUILayout.Button("Expand All", style))
 				{
-					treeView.ExpandAll();
+					view.ExpandAll();
 				}
 
 				if (GUILayout.Button("Collapse All", style))
 				{
-					treeView.CollapseAll();
+					view.CollapseAll();
 				}
 			}
 
