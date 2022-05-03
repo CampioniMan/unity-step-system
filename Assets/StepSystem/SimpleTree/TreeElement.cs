@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor.TreeViewExamples
+namespace StepSystem.SimpleTree
 {
 	[Serializable]
 	public class TreeElement

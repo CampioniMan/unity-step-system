@@ -3,10 +3,10 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using StepSystem;
 
-namespace UnityEditor.TreeViewExamples
+namespace StepSystem.SimpleTree
 {
 	[Serializable]
-	internal class StepViewData : TreeElement
+	public class StepViewData : TreeElement
 	{
 		public Texture2D icon;
 		public BaseCommonStep step;

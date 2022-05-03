@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UnityEditor.TreeViewExamples
+namespace StepSystem.SimpleTree
 {
 
 	// TreeElementUtility and TreeElement are useful helper classes for backend tree data structures.

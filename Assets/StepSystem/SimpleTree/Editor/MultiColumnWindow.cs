@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-namespace UnityEditor.TreeViewExamples
+namespace StepSystem.SimpleTree.UnityEditor
 {
 	class MultiColumnWindow : EditorWindow
 	{

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityEditor.TreeViewExamples
+namespace StepSystem.SimpleTree
 {
 	[CreateAssetMenu(fileName = "TreeDataAsset", menuName = "Tree Asset", order = 1)]
 	public class StepTreeViewData : ScriptableObject
@@ -9,13 +9,13 @@ namespace UnityEditor.TreeViewExamples
 		[SerializeField] List<StepViewData> m_TreeElements = new List<StepViewData>();
 		TreeModel<StepViewData> stepTree;
 
-		internal List<StepViewData> treeElements
+		public List<StepViewData> treeElements
 		{
 			get { return m_TreeElements; }
 			set { m_TreeElements = value; }
 		}
 
-		public void Preprare()
+		public void Prepare()
 		{
 			stepTree = new TreeModel<StepViewData>(m_TreeElements);
 		}
