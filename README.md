@@ -18,22 +18,19 @@ Here is a simple imaginary example of how you can arange some init steps as a tr
 # Next Steps (ha!)
 The features that will be implemented in order to deploy the version 1.0.0 are marked with a star (*).
 
-## General
-- Proper "Weight" field usage;*
-- Proper search field functionality;*
-
 ## UI Improvements
-- Display other lists that are inside the list you are currently seeing;
+- Display other lists that are inside the list you are currently seeing.
 
 ## More Step Types
 Suggestions are great!
 - SubTreeStep: Executes another step tree. Only completes when the sub tree successfully executes its necessary steps;*
-- DecisionStep: A step to split the flow between various other steps, choosing one or multiple to be executed;
+- DecisionStep: Splits the flow between various other steps, choosing one or multiple to be executed.
 
 ## Nice To Have
+- Support Unitasks;
 - The ability to cancel an AsyncStep using a [CancellationToken](https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-6.0);
 - Change the background color of an element ever so slightly based on its type;
-- A way to add icons using the UI;
+- A way to add icons using the UI.
 
 # Cool Things
 TreeView is a Unity class you can use in your own projects: https://docs.google.com/document/d/1B14wBRUiURm-LD6cISC5N0nvPngjglgL2T7vpsw1YSQ/edit?usp=sharing
