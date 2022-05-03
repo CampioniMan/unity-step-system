@@ -8,12 +8,12 @@ using StepSystem;
 
 namespace UnityEditor.TreeViewExamples
 {
-	internal class MultiColumnTreeView : TreeViewWithTreeModel<StepTreeViewData>
+	internal class MultiColumnTreeView : TreeViewWithTreeModel<StepViewData>
 	{
 		const float kRowHeights = 20f;
 		const float kToggleWidth = 18f;
 
-		public StepTreeViewData CurrentSelectedElement { get; private set; }
+		public StepViewData CurrentSelectedElement { get; private set; }
 
 		// All columns
 		enum MyColumns
@@ -21,7 +21,6 @@ namespace UnityEditor.TreeViewExamples
 			Icon,
 			StepAsset,
 			IsOptional,
-			Weight,
 			Description
 		}
 
@@ -36,11 +35,10 @@ namespace UnityEditor.TreeViewExamples
 			SortOption.StepAsset,
 			SortOption.StepAsset,
 			SortOption.StepAsset,
-			SortOption.StepAsset,
 			SortOption.StepAsset
 		};
 
-		public static void TreeToList (TreeViewItem root, IList<TreeViewItem> result)
+		public static void TreeToList(TreeViewItem root, IList<TreeViewItem> result)
 		{
 			if (root == null)
 			{
@@ -77,7 +75,7 @@ namespace UnityEditor.TreeViewExamples
 			}
 		}
 
-		public MultiColumnTreeView(TreeViewState state, MultiColumnHeader multicolumnHeader, TreeModel<StepTreeViewData> model) : base(state, multicolumnHeader, model)
+		public MultiColumnTreeView(TreeViewState state, MultiColumnHeader multicolumnHeader, TreeModel<StepViewData> model) : base(state, multicolumnHeader, model)
 		{
 			Assert.AreEqual(m_SortOptions.Length, Enum.GetValues(typeof(MyColumns)).Length, "Ensure number of sort options are in sync with number of MyColumns enum values");
 
@@ -126,7 +124,7 @@ namespace UnityEditor.TreeViewExamples
 
 			if (sortedColumns.Length == 0) return;
 
-			var myTypes = rootItem.children.Cast<TreeViewItem<StepTreeViewData>>();
+			var myTypes = rootItem.children.Cast<TreeViewItem<StepViewData>>();
 			var orderedQuery = InitialOrder(myTypes, sortedColumns);
 			for (int i = 1; i < sortedColumns.Length; i++)
 			{
@@ -144,7 +142,7 @@ namespace UnityEditor.TreeViewExamples
 			rootItem.children = orderedQuery.Cast<TreeViewItem> ().ToList ();
 		}
 
-		IOrderedEnumerable<TreeViewItem<StepTreeViewData>> InitialOrder(IEnumerable<TreeViewItem<StepTreeViewData>> myTypes, int[] history)
+		IOrderedEnumerable<TreeViewItem<StepViewData>> InitialOrder(IEnumerable<TreeViewItem<StepViewData>> myTypes, int[] history)
 		{
 			SortOption sortOption = m_SortOptions[history[0]];
 			bool ascending = multiColumnHeader.IsSortedAscending(history[0]);
@@ -163,7 +161,7 @@ namespace UnityEditor.TreeViewExamples
 
 		protected override void RowGUI(RowGUIArgs args)
 		{
-			var item = (TreeViewItem<StepTreeViewData>) args.item;
+			var item = (TreeViewItem<StepViewData>) args.item;
 
 			for (int i = 0; i < args.GetNumVisibleColumns(); ++i)
 			{
@@ -171,7 +169,7 @@ namespace UnityEditor.TreeViewExamples
 			}
 		}
 
-		void CellGUI(Rect cellRect, ref TreeViewItem<StepTreeViewData> item, MyColumns column, ref RowGUIArgs args)
+		void CellGUI(Rect cellRect, ref TreeViewItem<StepViewData> item, MyColumns column, ref RowGUIArgs args)
 		{
 			// Center cell rect vertically (makes it easier to place controls, icons etc in the cells)
 			CenterRectUsingSingleLineHeight(ref cellRect);
@@ -193,28 +191,13 @@ namespace UnityEditor.TreeViewExamples
 					indentedRect.width -= indentDisplacement + 5;
 
 					item.data.step = (BaseCommonStep)EditorGUI.ObjectField(indentedRect, GUIContent.none, item.data.step, typeof(BaseCommonStep), false);
+					item.data.name = item.data.step?.name ?? "";
 					break;
 				}
 				case MyColumns.IsOptional:
 				{
 					cellRect.xMin += 5f;
 					item.data.isOptional = EditorGUI.Toggle(cellRect, item.data.isOptional);
-					break;
-				}
-				case MyColumns.Weight:
-				{
-					if (item.data.isOptional)
-					{
-						GUI.enabled = false;
-						item.data.weight = EditorGUI.IntSlider(cellRect, GUIContent.none, 0, 0, 100);
-						GUI.enabled = true;
-						break;
-					}
-					if (item.data.weight < 1)
-					{
-						item.data.weight = 1;
-					}
-					item.data.weight = EditorGUI.IntSlider(cellRect, item.data.weight, 1, 100);
 					break;
 				}
 				case MyColumns.Description:
@@ -280,24 +263,12 @@ namespace UnityEditor.TreeViewExamples
 				},
 				new MultiColumnHeaderState.Column 
 				{
-					headerContent = new GUIContent("Weight", "When not optional, determines the weight of this asset when calculating progress percentage."),
-					headerTextAlignment = TextAlignment.Center,
-					sortedAscending = true,
-					sortingArrowAlignment = TextAlignment.Left,
-					width = 160,
-					minWidth = 150,
-					maxWidth = 180,
-					autoResize = true,
-					allowToggleVisibility = true
-				},
-				new MultiColumnHeaderState.Column 
-				{
 					headerContent = new GUIContent("Description", "Interesting things about this step."),
 					headerTextAlignment = TextAlignment.Center,
 					sortedAscending = true,
 					sortingArrowAlignment = TextAlignment.Left,
-					width = 250,
-					minWidth = 150,
+					width = 350,
+					minWidth = 250,
 					autoResize = true
 				}
 			};

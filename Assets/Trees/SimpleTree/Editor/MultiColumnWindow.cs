@@ -14,8 +14,8 @@ namespace UnityEditor.TreeViewExamples
 
 		SearchField searchField;
 		MultiColumnTreeView treeView;
-		StepTreeViewDataList stepTreeViewDataList;
-		TreeModel<StepTreeViewData> treeModel;
+		StepTreeViewData stepTreeViewDataList;
+		TreeModel<StepViewData> treeModel;
 
 		Rect multiColumnTreeViewRect 	=> new Rect(20f, 30f, position.width - 40f, position.height - 60f);
 		Rect toolbarRect 				=> new Rect(20f, 10f, position.width - 40f, 20f);
@@ -34,7 +34,7 @@ namespace UnityEditor.TreeViewExamples
 			return window;
 		}
 
-		void SetTreeAsset(StepTreeViewDataList myTreeAsset)
+		void SetTreeAsset(StepTreeViewData myTreeAsset)
 		{
 			stepTreeViewDataList = myTreeAsset;
 			isInitialized = false;
@@ -64,7 +64,7 @@ namespace UnityEditor.TreeViewExamples
 					multiColumnHeader.ResizeToFit();
 				}
 
-				treeModel = new TreeModel<StepTreeViewData>(stepTreeViewDataList.treeElements);
+				treeModel = new TreeModel<StepViewData>(stepTreeViewDataList.treeElements);
 				
 				treeView = new MultiColumnTreeView(treeViewState, multiColumnHeader, treeModel);
 
@@ -107,7 +107,7 @@ namespace UnityEditor.TreeViewExamples
 			using (new EditorGUILayout.HorizontalScope())
 			{
 				GUILayout.Label("Step List: ");
-				stepTreeViewDataList = (StepTreeViewDataList)EditorGUILayout.ObjectField( stepTreeViewDataList, typeof(StepTreeViewDataList), false, GUILayout.MinWidth(200), GUILayout.MaxWidth(5000));
+				stepTreeViewDataList = (StepTreeViewData)EditorGUILayout.ObjectField( stepTreeViewDataList, typeof(StepTreeViewData), false, GUILayout.MinWidth(200), GUILayout.MaxWidth(5000));
 				if (!IsListDefined())
 				{
 					GUILayout.EndArea();
@@ -124,7 +124,7 @@ namespace UnityEditor.TreeViewExamples
 
 				if (GUILayout.Button("+", style))
 				{
-					treeModel.AddElement(new StepTreeViewData(view.CurrentSelectedElement.depth + 1, treeModel.GenerateUniqueID(), null, "", false),
+					treeModel.AddElement(new StepViewData(view.CurrentSelectedElement.depth + 1, treeModel.GenerateUniqueID(), null, "", false),
 						view.CurrentSelectedElement, view.CurrentSelectedElement.children?.Count ?? 0);
 
 				}
@@ -132,7 +132,7 @@ namespace UnityEditor.TreeViewExamples
 				if (GUILayout.Button("-", style))
 				{
 					//TODO: Delete multiple rows
-					treeModel.RemoveElements(new List<StepTreeViewData>() { view.CurrentSelectedElement });
+					treeModel.RemoveElements(new List<StepViewData>() { view.CurrentSelectedElement });
 					view.NotifySelectedItemDeletion();
 				}
 

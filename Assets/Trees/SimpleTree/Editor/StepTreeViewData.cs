@@ -1,25 +1,61 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using StepSystem;
 
 namespace UnityEditor.TreeViewExamples
 {
-	[Serializable]
-	internal class StepTreeViewData : TreeElement
+	[CreateAssetMenu(fileName = "TreeDataAsset", menuName = "Tree Asset", order = 1)]
+	public class StepTreeViewData : ScriptableObject
 	{
-		public bool isOptional;
-		public int weight = 1;
-		public BaseCommonStep step;
-		public string description = "";
-		public Texture2D icon;
+		[SerializeField] List<StepViewData> m_TreeElements = new List<StepViewData>();
+		TreeModel<StepViewData> stepTree;
 
-		public StepTreeViewData(int depth, int id, BaseCommonStep step, string description, bool isOptional, int weight = 1) : base(step?.name ?? "", depth, id)
+		internal List<StepViewData> treeElements
 		{
-			this.step = step;
-			this.description = description;
-			this.isOptional = isOptional;
-			this.weight = weight;
+			get { return m_TreeElements; }
+			set { m_TreeElements = value; }
+		}
+
+		public void Preprare()
+		{
+			stepTree = new TreeModel<StepViewData>(m_TreeElements);
+		}
+
+		void PrepareChildren(StepViewData element)
+		{
+			if (element == null || element.children == null)
+			{
+				return;
+			}
+			foreach (StepViewData child in element.children)
+			{
+				child.step.Prepare();
+				PrepareChildren(child);
+			}
+		}
+
+		public void Execute()
+		{
+			ExecuteChildren(stepTree.root);
+		}
+
+		void ExecuteChildren(StepViewData element)
+		{
+			if (element == null || element.children == null)
+			{
+				//TODO: Notify progress
+				return;
+			}
+
+			foreach (StepViewData child in element.children)
+			{
+				child.step.Execute((success) =>
+				{
+					if (success)
+					{
+						ExecuteChildren(child);
+					}
+				});
+			}
 		}
 	}
 }
