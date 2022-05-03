@@ -11,19 +11,22 @@ Each step will derive from a Scriptable Object and will have its own logic to it
 
 # Example
 When developing a game you have to load and make some calculations at the start of the gameplay, like setting up the main character, setting up a server connection, downloading game store files, asking the server about other player's positions, etc.
-Here is a simple imaginary example of how you can arange some init steps as a tree where the parent must be successfully completed so all the children can execute:
+
+Here is a simple imaginary example of how you can arange some initialization steps as a tree:
 
 ![image](https://user-images.githubusercontent.com/20073691/152680626-cde9b681-1782-4bfa-acc1-e75e82639b81.png)
 
 # Next Steps (ha!)
 The features that will be implemented in order to deploy the version 1.0.0 are marked with a star (*).
 
+## General
+- Unit tests (*).
+
 ## UI Improvements
 - Display other lists that are inside the list you are currently seeing.
 
 ## More Step Types
 Suggestions are great!
-- SubTreeStep: Executes another step tree. Only completes when the sub tree successfully executes its necessary steps;*
 - DecisionStep: Splits the flow between various other steps, choosing one or multiple to be executed.
 
 ## Nice To Have
