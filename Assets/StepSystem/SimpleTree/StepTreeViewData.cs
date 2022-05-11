@@ -1,57 +1,45 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace StepSystem.SimpleTree
-{
+namespace StepSystem.SimpleTree {
 	[CreateAssetMenu(fileName = "TreeDataAsset", menuName = "Tree Asset", order = 1)]
-	public class StepTreeViewData : ScriptableObject
-	{
-		[SerializeField] List<StepViewData> m_TreeElements = new List<StepViewData>();
-		TreeModel<StepViewData> stepTree;
+	public class StepTreeViewData : ScriptableObject {
+		[FormerlySerializedAs("m_TreeElements")] [SerializeField] List<StepViewData> treeElements = new List<StepViewData>();
+		TreeModel<StepViewData> _stepTree;
 
-		public List<StepViewData> treeElements
-		{
-			get { return m_TreeElements; }
-			set { m_TreeElements = value; }
+		public List<StepViewData> TreeElements => treeElements;
+
+		public void Prepare() {
+			_stepTree = new TreeModel<StepViewData>(treeElements);
 		}
 
-		public void Prepare()
-		{
-			stepTree = new TreeModel<StepViewData>(m_TreeElements);
-		}
-
-		void PrepareChildren(StepViewData element)
-		{
-			if (element == null || element.children == null)
-			{
+		void PrepareChildren(TreeElement element) {
+			if (element?.Children == null) {
 				return;
 			}
-			foreach (StepViewData child in element.children)
-			{
+
+			foreach (TreeElement treeElement in element.Children) {
+				var child = (StepViewData)treeElement;
 				child.step.Prepare();
 				PrepareChildren(child);
 			}
 		}
 
-		public void Execute()
-		{
-			ExecuteChildren(stepTree.root);
+		public void Execute() {
+			ExecuteChildren(_stepTree.Root);
 		}
 
-		void ExecuteChildren(StepViewData element)
-		{
-			if (element == null || element.children == null)
-			{
+		static void ExecuteChildren(StepViewData element) {
+			if (element?.Children == null) {
 				//TODO: Notify progress
 				return;
 			}
 
-			foreach (StepViewData child in element.children)
-			{
-				child.step.Execute((success) =>
-				{
-					if (success)
-					{
+			foreach (TreeElement treeElement in element.Children) {
+				var child = (StepViewData)treeElement;
+				child.step.Execute((success) => {
+					if (success) {
 						ExecuteChildren(child);
 					}
 				});

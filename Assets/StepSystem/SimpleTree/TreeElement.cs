@@ -1,49 +1,49 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace StepSystem.SimpleTree
 {
 	[Serializable]
 	public class TreeElement
 	{
-		[SerializeField] int m_ID;
-		[SerializeField] string m_Name;
-		[SerializeField] int m_Depth;
-		[NonSerialized] TreeElement m_Parent;
-		[NonSerialized] List<TreeElement> m_Children;
+		[FormerlySerializedAs("mID")] [FormerlySerializedAs("m_ID")] [SerializeField] int elementId;
+		[FormerlySerializedAs("mName")] [FormerlySerializedAs("m_Name")] [SerializeField] string elementName;
+		[FormerlySerializedAs("mDepth")] [FormerlySerializedAs("m_Depth")] [SerializeField] int elementDepth;
+		[NonSerialized] TreeElement _elementParent;
+		[NonSerialized] List<TreeElement> _elementChildren;
 
-		public int depth
+		public int Depth
 		{
-			get { return m_Depth; }
-			set { m_Depth = value; }
+			get => elementDepth;
+			set => elementDepth = value;
 		}
 
-		public TreeElement parent
+		public TreeElement Parent
 		{
-			get { return m_Parent; }
-			set { m_Parent = value; }
+			get => _elementParent;
+			set => _elementParent = value;
 		}
 
-		public List<TreeElement> children
+		public List<TreeElement> Children
 		{
-			get { return m_Children; }
-			set { m_Children = value; }
+			get => _elementChildren;
+			set => _elementChildren = value;
 		}
 
-		public bool hasChildren
+		public bool HasChildren => Children != null && Children.Count > 0;
+
+		public string Name
 		{
-			get { return children != null && children.Count > 0; }
+			get => elementName;
+			set => elementName = value;
 		}
 
-		public string name
+		public int ID
 		{
-			get { return m_Name; } set { m_Name = value; }
-		}
-
-		public int id
-		{
-			get { return m_ID; } set { m_ID = value; }
+			get => elementId;
+			set => elementId = value;
 		}
 
 		public TreeElement()
@@ -52,9 +52,9 @@ namespace StepSystem.SimpleTree
 
 		public TreeElement(string name, int depth, int id)
 		{
-			m_Name = name;
-			m_ID = id;
-			m_Depth = depth;
+			elementName = name;
+			elementId = id;
+			elementDepth = depth;
 		}
 	}
 }
