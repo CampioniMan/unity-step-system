@@ -93,7 +93,7 @@ namespace StepSystem.SimpleTree.Editor {
 			GUILayout.BeginArea(rect);
 
 			using (new EditorGUILayout.HorizontalScope()) {
-				GUILayout.Label("Step List: ");
+				GUILayout.Label("Step Tree: ");
 				_stepTreeViewDataList = (StepTreeViewData)EditorGUILayout.ObjectField(_stepTreeViewDataList,
 					typeof(StepTreeViewData), false, GUILayout.MinWidth(200), GUILayout.MaxWidth(5000));
 				if (!IsListDefined()) {
