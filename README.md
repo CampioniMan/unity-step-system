@@ -15,7 +15,7 @@ When developing a game you have to load and make some calculations at the start 
 
 Here is a simple imaginary example of how you can arrange some initialization steps as a tree:
 
-![image](https://user-images.githubusercontent.com/20073691/152680626-cde9b681-1782-4bfa-acc1-e75e82639b81.png)
+![Window Example](https://user-images.githubusercontent.com/20073691/167965443-f15a9aba-9f72-4bb2-9fe9-e91d2e382b0e.png)
 
 # Next Steps (ha!)
 The features that will be implemented in order to deploy the version 1.0.0 are marked with a star (*).
